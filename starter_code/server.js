@@ -112,7 +112,22 @@ app.route('/api/study-sets')
     res.json(studySets);
   })
   .post(function(req,res){ // create a study set
-    // grab set title and any included phrases from form data
+      var newStudy = {
+
+      newStudy.title = req.body.title;
+      newStudy.phrase = req.body.phraseID;
+      newStudy.notes = req.body.notes
+      
+      // set a unique id never used by a phrase until now
+      totalSetCount++;
+      newStudy.id = totalSetCount;
+
+      // add newPhrase to `phrases` array
+      studySets.push(newStudy);
+      
+      // send newPhrase as JSON response
+      res.json(newStudy);
+        // grab set title and any included phrases from form data
     // set up new study-set object
 
     // add a globally unique set id
@@ -125,9 +140,10 @@ app.route('/api/study-sets')
 
 
 app.route('/api/study-sets/:setId')
-  .get(function(req, res) {
+  .get(function(req, res) { 
     // save the value of the id, and find the set
-
+    var targetId = parseInt(req.params.setId);
+    var targetSet = _.findWhere(studySets, {id: targetId});
     // send back the set
   })
   .put(function(req,res){
